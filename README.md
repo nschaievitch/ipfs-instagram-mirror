@@ -26,3 +26,5 @@ ipfs name publish /ipfs/(your CID here)
 ## IPFS Mirror Webview
 
 The website can be seen live [here](https://ipfs-instagram-mirror.vercel.app). After entering the IPFS address on the top input, wait for the content to load and display. Try `/ipfs/QmSDo1SuD4CT6kZyrKf2yXtfvLadQMyx5aRP2eVi8cojAp` for a sample.
+
+![Example](assets/example.png)
