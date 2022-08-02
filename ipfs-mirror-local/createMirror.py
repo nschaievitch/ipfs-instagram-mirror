@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup as bs
-import os
+import os, shutil, json
 
 # Gets the Personal Info file and turns it into a BeautifulSoup
 personalInfoFileRaw = open('account_info_download/personal_information/personal_information.html').read()
@@ -36,6 +36,40 @@ def parsePost(post):
     }
 
 
-posts = map(parsePost, posts)
+posts = list(map(parsePost, posts))
+
+if "media" not in os.listdir(f"mirror-{username}"):
+    os.mkdir(f"mirror-{username}/media")
+
+getImageId = lambda imgPath : imgPath.split("/")[-1].split(".")[0]
 
 
+def copyImage(imgPath): 
+    shutil.copyfile(f"account_info_download/{imgPath}", f"mirror-{username}/media/{getImageId(imgPath)}.jpg")
+
+
+# Copy all relevant pictures
+copyImage(profilePicPath)
+
+for post in posts:
+    for i in post["imgsPaths"]:
+        copyImage(i)
+
+accountDic = {
+    "username": username,
+    "bio": bio,
+    "name": name,
+    "profilePic": getImageId(profilePicPath) + ".jpg",
+    "posts": []
+}
+
+for post in posts:
+    print(post["caption"])
+    accountDic["posts"].append({
+        "caption": post["caption"],
+        "timestamp": post["timestamp"],
+        "imgs": list(map(lambda i : getImageId(i) + ".jpg",  post["imgsPaths"]))
+    })
+
+JSONText = json.dumps(accountDic)
+open(f"mirror-{username}/info.json", "w").write(JSONText)
