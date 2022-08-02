@@ -1,32 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react'
+import Form from "react-bootstrap/Form"
+import Button from "react-bootstrap/Button"
+import Post from "./components/Post"
+import ProfileInfo from './components/ProfileInfo'
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const [gateway, setGateway] = useState("https://gateway.ipfs.io")
+  const [profile, setProfile] = useState("")
+  const [profileInfo, setProfileInfo] = useState("")
+
+  const fetchJSONData = async (url) => {
+    const res = await fetch(url)
+    const json = await res.json()
+
+    return json
+  }
+
+  const getUrlFromProfileFile = (filePath) => {
+    return `${gateway}${profile}${filePath}`
+  }
+
+  useEffect(() => {
+    if (profile !== "") {
+      fetchJSONData(getUrlFromProfileFile("/info.json")).then(setProfileInfo)
+    }
+
+    
+  }, [profile, gateway])
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div className="container">
+      <div className="w-75 mx-auto my-5"><Form.Control placeholder="Profile address" value={profile} onChange={(e) => setProfile(e.target.value)}/></div>
+      {profileInfo && <ProfileInfo profileInfo={profileInfo} getUrlFromProfileFile={getUrlFromProfileFile}/>}
+      {profileInfo && profileInfo.posts.map((post) => <Post post={post} getUrlFromProfileFile={getUrlFromProfileFile} profileInfo={profileInfo}/>)}
     </div>
   )
 }
