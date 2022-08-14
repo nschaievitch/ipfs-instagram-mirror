@@ -2,7 +2,7 @@
 
 IPFS based protocol for mirroring/archiving instagram accounts
 
-This project allows creation of an IPFS based mirror or archive for Instagram accounts. It contains to parts, separated into two respective folders. The first part (the `ipfs-mirror-local` folder) contains a script to format an Instagram information requests for an account into a mirror. The second part (the `ipfs-mirror-webview` folder) contains a simple React-based website which allows to explore said mirror.
+This project allows creation of an IPFS based mirror or archive for Instagram accounts. It contains to parts, separated into two respective folders. The first part (the `ipfs-mirror-local` folder) contains a script to format an Instagram information requests for an account into a mirror. The second part (the `ipfs-mirror-webview` folder) contains a simple React-based website which allows to explore said mirror. IPNS is fully supported, for dynamic updates to the profile.
 
 ## IPFS Mirror Local
 
